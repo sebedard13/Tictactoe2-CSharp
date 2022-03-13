@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Script;
+using TicTacToe2.Controller;
 using TicTacToe2.Model;
+using TicTacToe2.Utils.Debug;
+using TicTacToe2.View;
 
 namespace TicTacToe2
 {
@@ -13,6 +15,8 @@ namespace TicTacToe2
         
         static void Main(string[] args)
         {
+            Debug.Debuger = new DebugerAll();
+            
             EventController.ListenEvent("close", strings =>
             {
                 Runing = false;
@@ -20,7 +24,7 @@ namespace TicTacToe2
             
             while (Runing)
             {
-                string a = Console.In.ReadLine();
+                string a = ConsoleInterface.getLine();
                 if (!String.IsNullOrEmpty(a))
                 {
                     string[] list = a.Split(" ");

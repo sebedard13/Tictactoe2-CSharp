@@ -1,4 +1,4 @@
-﻿using Script;
+﻿using TicTacToe2.Controller;
 using TicTacToe2.Model;
 
 namespace TicTacToe2

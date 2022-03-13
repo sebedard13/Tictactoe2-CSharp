@@ -1,7 +1,8 @@
 ﻿using System;
 using TicTacToe2.Model;
+using TicTacToe2.View;
 
-namespace Script
+namespace TicTacToe2.Controller
 {
     class TicTacToeController
     {
@@ -23,7 +24,7 @@ namespace Script
         
         public void MapChange(String[] args)
         {
-           Console.WriteLine(_obj.GetStringRepresentation());
+           ConsoleInterface.WriteLine(_obj.GetStringRepresentation());
         }
     }
 }

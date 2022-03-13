@@ -1,9 +1,9 @@
 ﻿
 using System;
 
-namespace TicTacToe2
+namespace TicTacToe2.Model.Exception
 {
-    class CaseNotValidException : Exception
+    class CaseNotValidException : System.Exception
     {
      
         
@@ -17,7 +17,7 @@ namespace TicTacToe2
             
         }
 
-        public CaseNotValidException(String s, Exception e) : base(s, e)
+        public CaseNotValidException(String s, System.Exception e) : base(s, e)
         {
             
         }

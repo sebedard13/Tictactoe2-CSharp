@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TicTacToe2
+namespace TicTacToe2.Utils
 {
     public class LoopList<T> : Queue<T>
     {

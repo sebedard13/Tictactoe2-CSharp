@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using TicTacToe2.Utils;
+using TicTacToe2.Utils.Debug;
 using TicTacToe2.View;
 
-namespace Script
+namespace TicTacToe2.Controller
 {
     public class EventController
     {
@@ -53,7 +55,7 @@ namespace Script
             }
             catch (KeyNotFoundException e)
             {
-                Debug.WriteWarning("Event "+eventName+" was not found");
+                Debug.Warning("Event "+eventName+" was not found");
             }
         }
         

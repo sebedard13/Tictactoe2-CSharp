@@ -1,5 +1,6 @@
 ﻿using System;
-using Script;
+using TicTacToe2.Controller;
+using TicTacToe2.Model.Exception;
 
 namespace TicTacToe2.Model
 {
