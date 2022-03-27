@@ -4,28 +4,28 @@ using TicTacToe2.Model.Exception;
 
 namespace TicTacToe2.Model
 {
-    public enum TicTacToeTile
+    public enum Tile
     {
         X,O,Empty
     }
     
-    public class TicTacToeMap
+    public class Map
     {
         private int _size;
 
-        private TicTacToeTile[,] _mapArray;
+        private Tile[,] _mapArray;
 
-        private TicTacToeController _controller;
+        private MapController _controller;
 
-        public TicTacToeMap(int size = 3, TicTacToeTile defaultTile = TicTacToeTile.Empty)
+        public Map(int size = 3, Tile defaultTile = Tile.Empty)
         {
             _size = size;
-            _mapArray = new TicTacToeTile[size, size];
-            _controller = new TicTacToeController(this);
+            _mapArray = new Tile[size, size];
+            _controller = new MapController(this);
             SetAllCases(defaultTile);
         }
 
-        public void SetAllCases(TicTacToeTile tile)
+        public void SetAllCases(Tile tile)
         {
             for (int i=0; i<_mapArray.GetLength(0); i++)
             {
@@ -37,7 +37,7 @@ namespace TicTacToe2.Model
         }
         
 
-        public void SetCase(TicTacToeTile tile, int posX, int posY)
+        public void SetCase(Tile tile, int posX, int posY)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace TicTacToe2.Model
         // 7 | 8 | 9
         // 4 | 5 | 6
         // 1 | 2 | 3
-        public void SetCase(TicTacToeTile tile, int pos)
+        public void SetCase(Tile tile, int pos)
         {
             int posY = (int) Math.Ceiling((double)pos / _size - 1);
             
@@ -77,11 +77,11 @@ namespace TicTacToe2.Model
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    TicTacToeTile tile =  _mapArray[i,j];
+                    Tile tile =  _mapArray[i,j];
 
                     switch (tile)
                     {
-                        case TicTacToeTile.Empty:
+                        case Tile.Empty:
                             message += " ";
                             break;
                         default:

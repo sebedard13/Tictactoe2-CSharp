@@ -4,11 +4,11 @@ using TicTacToe2.View;
 
 namespace TicTacToe2.Controller
 {
-    class TicTacToeController
+    class MapController
     {
-        private TicTacToeMap _obj;
+        private Map _obj;
         
-        public TicTacToeController(TicTacToeMap obj)
+        public MapController(Map obj)
         {
             _obj = obj;
             EventController.ListenEvent("setCase", SetCase);
@@ -18,7 +18,7 @@ namespace TicTacToe2.Controller
         public void SetCase(String[] args)
         {
             int value = Int32.Parse(args[0]);
-            _obj.SetCase(TicTacToeTile.X, value);
+            _obj.SetCase(Tile.X, value);
             EventController.CallEvent("mapChange");
         }
         

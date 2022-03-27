@@ -9,9 +9,9 @@ namespace TicTacToe2
 {
     class Program
     {
-        static private TicTacToeMap _map = new TicTacToeMap();
+        static private Map _map = new Map();
 
-        static public Boolean Runing = true;
+        static public Boolean Running = true;
         
         static void Main(string[] args)
         {
@@ -19,10 +19,10 @@ namespace TicTacToe2
             
             EventController.ListenEvent("close", strings =>
             {
-                Runing = false;
+                Running = false;
             });
             
-            while (Runing)
+            while (Running)
             {
                 string a = ConsoleInterface.getLine();
                 if (!String.IsNullOrEmpty(a))

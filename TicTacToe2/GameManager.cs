@@ -9,15 +9,15 @@ namespace TicTacToe2
   
         private bool _waitingForPlayerAction = true;
 
-        private TicTacToeMap _map;
+        private Map _map;
     
         void Start()
         {
-            _map = new TicTacToeMap();
+            _map = new Map();
             EventController.CallEvent("mapChange");
         }
 
-        // Update is called once per frame
+        // Update is called onceper frame
         void Update()
         {
             if (_waitingForPlayerAction)
