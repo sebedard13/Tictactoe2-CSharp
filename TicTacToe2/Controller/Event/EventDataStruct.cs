@@ -2,40 +2,36 @@
 using System.Collections.Generic;
 using TicTacToe2.Utils.Debug;
 
-namespace TicTacToe2.Controller
+namespace TicTacToe2.Controller.Event
 {
     public class EventDataStruct
     {
-        private readonly List<EventDataStructObject> _list = new ();
-        
-        public bool IsFixedSize => false;
-
-        public bool IsReadOnly => false;
+        private readonly List<Event> _list = new();
 
         public int Count
-         => _list.Count;
+            => _list.Count;
 
         public bool DoubleAction { get; set; } = false;
-        
+
         public void Add(string key, Action<string[]> value)
         {
-            EventDataStructObject newObj = new EventDataStructObject(key, value);
+            Event newObj = new Event(key, value);
 
             if (DoubleAction)
             {
-                int index =  IndexOfKeyIndex(newObj);
-                
-                _list.Insert(index, newObj); 
+                int index = IndexOfKeyIndex(newObj);
+
+                _list.Insert(index, newObj);
             }
             else
             {
                 int index = IndexOfKey(newObj);
-                
+
                 if (index < 0)
                 {
                     //No identic key
                     index = ~index;
-                    _list.Insert(index, newObj); 
+                    _list.Insert(index, newObj);
                 }
                 else
                 {
@@ -46,84 +42,81 @@ namespace TicTacToe2.Controller
                         {
                             Debug.Error("Same key and action in event data structure");
                             return;
-                            
+
                             throw new ArgumentException("");
                         }
 
                         indexLoop++;
                     }
-                  
-                    _list.Insert(index, newObj); 
+
+                    _list.Insert(index, newObj);
                 }
             }
-         
         }
-        
+
         public void Clear()
         {
             _list.Clear();
         }
-        
+
         public bool Contains(string key)
         {
             return IndexOfKey(key) >= 0;
         }
-        
-        public List<EventDataStructObject> Get(string key)
+
+        public List<Event> Get(string key)
         {
             Range range = GetRange(key);
 
-            return _list.GetRange(range.Start.Value, range.End.Value-range.Start.Value);
+            return _list.GetRange(range.Start.Value, range.End.Value - range.Start.Value);
         }
 
-        public List<EventDataStructObject> GetList()
+        public List<Event> GetList()
         {
             return _list;
         }
-        
+
         private Range GetRange(string key)
         {
             int index = IndexOfKey(key);
             if (index < 0)
             {
-                return new Range(0,0);
+                return new Range(0, 0);
             }
 
             int indexStart = index;
-            
+
             int indexEnd = index;
 
             do
             {
                 indexEnd++;
             } while (TryFindKey(indexEnd) == key);
-            
+
             return new Range(indexStart, indexEnd);
         }
-        
-        
-        
+
         public void RemoveEventName(string key)
         {
             Range range = GetRange(key);
-            
+
             for (int i = range.Start.Value; i < range.End.Value; i++)
             {
                 _list.RemoveAt(range.Start.Value);
             }
         }
-        
+
         public void Remove(string key, Action<string[]> action)
         {
-            Remove(new EventDataStructObject(key, action));
+            Remove(new Event(key, action));
         }
-        
-        private void Remove(EventDataStructObject obj)
+
+        private void Remove(Event obj)
         {
             Range range = GetRange(obj.Key);
-            
+
             int end = range.End.Value;
-            for (int i = range.Start.Value; i <end; i++)
+            for (int i = range.Start.Value; i < end; i++)
             {
                 if (_list[i].Values == obj.Values)
                 {
@@ -136,23 +129,23 @@ namespace TicTacToe2.Controller
 
         public int IndexOfKey(string key)
         {
-            EventDataStructObject sampleObj = new EventDataStructObject(key, null);
+            Event sampleObj = new Event(key, null);
             return IndexOfKey(sampleObj);
         }
-        
+
         /*
          * Return the first 
          */
-        private int IndexOfKey(EventDataStructObject obj)
+        private int IndexOfKey(Event obj)
         {
             int index = _list.BinarySearch(obj);
-            
+
             //Get the first in the array
-            while (TryFindKey(index -1) == obj.Key)
+            while (TryFindKey(index - 1) == obj.Key)
             {
                 index--;
             }
-            
+
             return index;
         }
 
@@ -167,7 +160,7 @@ namespace TicTacToe2.Controller
                 return null;
             }
         }
-        
+
         private Action<string[]> TryFindAction(int index)
         {
             try
@@ -180,10 +173,10 @@ namespace TicTacToe2.Controller
             }
         }
 
-        private int IndexOfKeyIndex(EventDataStructObject obj)
+        private int IndexOfKeyIndex(Event obj)
         {
             int index = IndexOfKey(obj);
-            
+
             //No identic key
             if (index < 0)
             {
@@ -193,7 +186,4 @@ namespace TicTacToe2.Controller
             return index;
         }
     }
-    
-   
-
 }

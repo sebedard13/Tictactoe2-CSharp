@@ -6,7 +6,7 @@ namespace TicTacToe2.View
     {
 
         
-        public static string getLine()
+        public static string GetLine()
         {
             return Console.In.ReadLine();
         }

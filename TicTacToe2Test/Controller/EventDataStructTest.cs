@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using TicTacToe2.Controller;
+using TicTacToe2.Controller.Event;
 
 namespace Test.Controller
 {
     public class EventDataStructTest
     {
         private EventDataStruct _struc;
+        
         [SetUp]
         public void Setup()
         {
@@ -37,9 +39,9 @@ namespace Test.Controller
             _struc.Add("bc", null);
             _struc.Add("jk", null);
             _struc.Add("zb", null);
-            
 
-            List<EventDataStructObject> list = _struc.GetList();
+
+            List<Event> list = _struc.GetList();
             Assert.AreEqual("ba", list[2].Key);
             Assert.AreEqual("bc", list[3].Key);
             Assert.AreEqual("da", list[6].Key);
@@ -74,7 +76,7 @@ namespace Test.Controller
             _struc.Add("z", null);
             
 
-            List<EventDataStructObject> list = _struc.GetList();
+            List<Event> list = _struc.GetList();
             Assert.AreEqual("a", list[0].Key);
             Assert.AreEqual("a", list[1].Key);
             Assert.AreEqual("b", list[2].Key);
@@ -116,7 +118,7 @@ namespace Test.Controller
             FillEventDataStructAToZ(_struc);
 
             string key = "b";
-            List<EventDataStructObject> indexOfKey = _struc.Get(key);
+            List<Event> indexOfKey = _struc.Get(key);
             Assert.AreEqual(2, indexOfKey.Count);
             for (int i = 0; i < indexOfKey.Count; i++)
             {
@@ -125,7 +127,7 @@ namespace Test.Controller
             
             
             string key2 = "z";
-            List<EventDataStructObject> indexOfKey2 = _struc.Get(key2);
+            List<Event> indexOfKey2 = _struc.Get(key2);
             Assert.AreEqual(2, indexOfKey2.Count);
             for (int i = 0; i < indexOfKey.Count; i++)
             {
@@ -142,14 +144,14 @@ namespace Test.Controller
                 
             string key = "b";
             _struc.RemoveEventName(key);
-            List<EventDataStructObject> indexOfKey = _struc.Get(key);
+            List<Event> indexOfKey = _struc.Get(key);
             Assert.AreEqual(0, indexOfKey.Count);
             Assert.AreEqual(countStart-2, _struc.Count);
 
 
             string key2 = "z";
             _struc.RemoveEventName(key2);
-            List<EventDataStructObject> indexOfKey2 = _struc.Get(key2);
+            List<Event> indexOfKey2 = _struc.Get(key2);
             Assert.AreEqual(0, indexOfKey2.Count);
             Assert.AreEqual(countStart-4, _struc.Count);
         }
@@ -167,14 +169,14 @@ namespace Test.Controller
                 
             string key = "b";
             _struc.Remove(key, Action3);
-            List<EventDataStructObject> indexOfKey = _struc.Get(key);
+            List<Event> indexOfKey = _struc.Get(key);
             Assert.AreEqual(3, indexOfKey.Count);
             Assert.AreEqual(countStart-2, _struc.Count);
 
 
             string key2 = "z";
             _struc.Remove(key2, Action2);
-            List<EventDataStructObject> indexOfKey2 = _struc.Get(key2);
+            List<Event> indexOfKey2 = _struc.Get(key2);
             Assert.AreEqual(4, indexOfKey2.Count);
             Assert.AreEqual(countStart-3, _struc.Count);
         }
