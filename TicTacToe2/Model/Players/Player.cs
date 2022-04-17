@@ -9,7 +9,7 @@
             _playerTile = playerTile;
         }
 
-        public abstract int UserChoosePosition();
+        public abstract void UserChoosePosition(TicTacToeGame game);
 
         public Tile PlayerTile => _playerTile;
     }

@@ -1,19 +1,19 @@
 ﻿using System;
-using TicTacToe2.Model.Players;
 
 namespace TicTacToe2.Model.Players
 {
-
-    class RandomPlayer : Player
+    public class RandomPlayer : Player
     {
         public RandomPlayer(Tile playerTile) : base(playerTile)
         {
         }
 
-        public override int UserChoosePosition()
+        public override void UserChoosePosition(TicTacToeGame game)
         {
             Random rnd = new Random();
-            return rnd.Next(1, 10);
+
+            game.PlayerTurn(rnd.Next(1, 10));
+            game.NextPlayerTurn();
         }
     }
 }

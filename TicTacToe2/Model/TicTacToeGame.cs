@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using TicTacToe2.Controller.States;
 using TicTacToe2.Model.Maps;
 using TicTacToe2.Utils;
 using TicTacToe2.Model.Players;
@@ -26,47 +27,61 @@ namespace TicTacToe2.Model
 
         public void StartGame()
         {
-            ConsoleInterface.WriteLine("Game Start");
-            ConsoleInterface.WriteLine(_map.GetStringRepresentation());
-            Player playerWin = null;
-            while (_gameIsActive)
-            {
-                APlayerTurn();
-                playerWin = PlayerHasWin();
-                if (playerWin == null && CalculateTie() || playerWin != null)
-                {
-                    _gameIsActive = false;
-                }
-                ConsoleInterface.WriteLine(_map.GetStringRepresentation());
-            }
-
-            if (playerWin == null)
-            {
-                ConsoleInterface.WriteLine("It is a tie");
-            }
-            else
-            {
-                ConsoleInterface.WriteLine("Player "+playerWin.PlayerTile+" win");
-            }
+            ViewController.Call("StartGame");
+            ViewController.Call("UpdateMap", new[] {_map.GetStringRepresentation()});
+            NextPlayerTurn();
         }
 
-        public void APlayerTurn()
+        private void EndGame()
         {
-            Player player = _playerTurn.LoopQueue();
-            bool validPos = true;
-            do
+            Player playerWin = PlayerHasWin();
+            if (playerWin == null && CalculateTie() || playerWin != null)
             {
-                int pos = player.UserChoosePosition();
-                if (_map.GetCase(pos) == Tile.Empty)
+                _gameIsActive = false;
+            }
+            ViewController.Call("UpdateMap", new []{_map.GetStringRepresentation()});
+
+            if (!_gameIsActive)
+            {
+                if (playerWin == null)
                 {
-                    _map.SetCase(player.PlayerTile, pos);
-                    validPos = false;
+                    ViewController.Call("Tie");
                 }
-                
-            } while (validPos);
+                else
+                {
+                    ViewController.Call("PlayerWin", new[] {playerWin.PlayerTile.ToString()});
+                }
+            }
         }
 
-        public Player PlayerHasWin()
+        public void CloseGame()
+        {
+            Program.CurrentState = new StatePlayerSelect(_players[0], _players[1]);
+        }
+
+        public bool PlayerTurn(int pos)
+        {
+            //Valid pos
+            if (_map.GetCase(pos) == Tile.Empty)
+            { 
+                Player player = _playerTurn.LoopQueue();
+                _map.SetCase(player.PlayerTile, pos);
+                EndGame();
+                return true;
+            }
+
+            return false;
+        }
+
+        public void NextPlayerTurn()
+        {
+            if (_gameIsActive)
+            {
+                _playerTurn.Peek().UserChoosePosition(this);
+            }
+        }
+
+        private Player PlayerHasWin()
         {
             foreach (Player player in _players)
             {
@@ -78,8 +93,8 @@ namespace TicTacToe2.Model
 
             return null;
         }
-        
-        public bool CalculateTie()
+
+        private bool CalculateTie()
         {
             return !_map.HasEmptyCase();
         }
