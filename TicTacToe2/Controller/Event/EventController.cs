@@ -23,6 +23,7 @@ namespace TicTacToe2.Controller.Event
 
         public void Listen(string eventName, Action<string[]> action)
         {
+            eventName = CheckValidEvent(eventName, "Listen to");
             _eventList.Add(eventName, action);
         }
 
@@ -33,6 +34,7 @@ namespace TicTacToe2.Controller.Event
 
         public void Call(string eventName, string[] args)
         {
+            eventName = CheckValidEvent(eventName, "Call");
             List<Event> events = _eventList.Get(eventName);
             if (events.Count <= 0)
             {
@@ -53,6 +55,17 @@ namespace TicTacToe2.Controller.Event
         public void Remove(string eventName)
         {
             _eventList.RemoveEventName(eventName);
+        }
+
+        private string CheckValidEvent(string eventName, string functionName)
+        {
+            string lowerEventName = eventName.ToLowerInvariant();
+            if (eventName != lowerEventName)
+            {
+                Debug.Warning(functionName+" event "+eventName+" is not lowercase");
+            }
+
+            return lowerEventName;
         }
     }
 }

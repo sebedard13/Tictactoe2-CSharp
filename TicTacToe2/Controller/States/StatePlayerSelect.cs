@@ -16,7 +16,7 @@ namespace TicTacToe2.Controller.States
             Player[0] = p1;
             Player[1] = p2;
             
-            ViewController.Call("ChoosePlayer");
+            ViewController.Call("chooseplayer");
             
             UserEvents.Listen("set", strings =>
             {
@@ -47,7 +47,7 @@ namespace TicTacToe2.Controller.States
                 
             });
 
-            UserEvents.Listen("GameStart", strings =>
+            UserEvents.Listen("startgame", strings =>
             {
                 if (Player[0] != null&& Player[1] != null)
                 {

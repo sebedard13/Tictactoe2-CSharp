@@ -27,8 +27,8 @@ namespace TicTacToe2.Model
 
         public void StartGame()
         {
-            ViewController.Call("StartGame");
-            ViewController.Call("UpdateMap", new[] {_map.GetStringRepresentation()});
+            ViewController.Call("startgame");
+            ViewController.Call("updatemap", new[] {_map.GetStringRepresentation()});
             NextPlayerTurn();
         }
 
@@ -39,17 +39,17 @@ namespace TicTacToe2.Model
             {
                 _gameIsActive = false;
             }
-            ViewController.Call("UpdateMap", new []{_map.GetStringRepresentation()});
+            ViewController.Call("updatemap", new []{_map.GetStringRepresentation()});
 
             if (!_gameIsActive)
             {
                 if (playerWin == null)
                 {
-                    ViewController.Call("Tie");
+                    ViewController.Call("tie");
                 }
                 else
                 {
-                    ViewController.Call("PlayerWin", new[] {playerWin.PlayerTile.ToString()});
+                    ViewController.Call("playerwin", new[] {playerWin.PlayerTile.ToString()});
                 }
             }
         }

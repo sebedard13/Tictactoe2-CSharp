@@ -12,7 +12,7 @@ namespace TicTacToe2.Controller.States
             TicTacToeGame game = new TicTacToeGame(players[0], players[1]);
             game.StartGame();
             
-            UserEvents.Listen("Play", strings =>
+            UserEvents.Listen("play", strings =>
             {
                 bool valid = game.PlayerTurn(Int16.Parse(strings[0]));
                 if (!valid)
@@ -25,7 +25,7 @@ namespace TicTacToe2.Controller.States
                 }
             });
             
-            UserEvents.Listen("CloseGame", strings =>
+            UserEvents.Listen("closegame", strings =>
             {
                 game.CloseGame();
             });

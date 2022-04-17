@@ -1,6 +1,4 @@
 ﻿
-using System;
-using System.Linq;
 using TicTacToe2.Controller.Event;
 
 namespace TicTacToe2.Controller.States

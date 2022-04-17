@@ -10,12 +10,12 @@ namespace TicTacToe2.View
 
         static ViewController()
         {
-            ViewEvent.Listen("ChoosePlayer", ChoosePlayer);
-            ViewEvent.Listen("ChooseRestart", ChooseRestart);
-            ViewEvent.Listen("StartGame", StartGame);
-            ViewEvent.Listen("UpdateMap", UpdateMap);
-            ViewEvent.Listen("Tie", Tie);
-            ViewEvent.Listen("PlayerWin", PlayerWin);
+            ViewEvent.Listen("chooseplayer", ChoosePlayer);
+            ViewEvent.Listen("chooserestart", ChooseRestart);
+            ViewEvent.Listen("startgame", StartGame);
+            ViewEvent.Listen("updatemap", UpdateMap);
+            ViewEvent.Listen("tie", Tie);
+            ViewEvent.Listen("playerwin", PlayerWin);
         }
 
         private static void ChoosePlayer(string[] obj)
