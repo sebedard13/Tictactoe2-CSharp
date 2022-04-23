@@ -1,5 +1,6 @@
 ﻿using System;
 using TicTacToe2.Controller.Event;
+using TicTacToe2.Controller.Event.EventList;
 using TicTacToe2.Model.Players;
 
 namespace TicTacToe2.View
@@ -18,34 +19,34 @@ namespace TicTacToe2.View
             ViewEvent.Listen("playerwin", PlayerWin);
         }
 
-        private static void ChoosePlayer(string[] obj)
+        private static void ChoosePlayer(StringArgs obj)
         {
             ConsoleInterface.WriteLine("Player Selection");
         }
 
-        private static void ChooseRestart(string[] obj)
+        private static void ChooseRestart(StringArgs obj)
         {
             ConsoleInterface.WriteLine("Restart the game? y/n");
         }
         
-        private static void StartGame(string[] obj)
+        private static void StartGame(StringArgs obj)
         {
             ConsoleInterface.WriteLine("Game Start");
         }
         
-        private static void UpdateMap(string[] obj)
+        private static void UpdateMap(StringArgs obj)
         {
-            ConsoleInterface.WriteLine(obj[0]);
+            ConsoleInterface.WriteLine(obj.Args[0]);
         }
         
-        private static void Tie(string[] obj)
+        private static void Tie(StringArgs obj)
         {
             ConsoleInterface.WriteLine("It is a tie");
         }
         
-        private static void PlayerWin(string[] obj)
+        private static void PlayerWin(StringArgs obj)
         {
-            ConsoleInterface.WriteLine("Player "+obj[0]+" win");
+            ConsoleInterface.WriteLine("Player "+obj.Args[0]+" win");
         }
         
         public static void Call(string eventName)

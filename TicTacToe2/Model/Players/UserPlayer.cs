@@ -11,7 +11,7 @@ namespace TicTacToe2.Model.Players
 
         public override void UserChoosePosition(TicTacToeGame game)
         {
-            //Wait For Event
+            //Wait For EventArgs
         }
     }
 }

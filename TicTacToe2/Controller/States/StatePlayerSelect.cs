@@ -18,8 +18,9 @@ namespace TicTacToe2.Controller.States
             
             ViewController.Call("chooseplayer");
             
-            UserEvents.Listen("set", strings =>
+            UserEvents.Listen("set", stringArgs =>
             {
+                string[] strings = stringArgs.Args;
                 int playerNo = Int32.Parse(strings[0]) - 1;
                 Tile tile;
                 if (playerNo == 0)

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using TicTacToe2.Controller;
 using TicTacToe2.Controller.Event;
+using TicTacToe2.Controller.Event.EventList;
+using TicTacToe2.Utils.Debug;
+using EventArgs = TicTacToe2.Controller.Event.EventList.EventArgs;
 
 namespace Test.Controller
 {
@@ -15,12 +17,13 @@ namespace Test.Controller
         {
             _struc = new EventDataStruct();
             _struc.DoubleAction = true;
+            Debug.Debuger = new DebugerAll();
         }
 
         [Test]
         public void Add_FillaToz_AllPresent()
         {
-            FillEventDataStructAToZ(_struc);
+            FillEventDataStructAToZ(_struc, ActionDefault);
             
             Assert.True(_struc.Contains("a"));
             Assert.True(_struc.Contains("b"));
@@ -31,17 +34,38 @@ namespace Test.Controller
         }
         
         [Test]
+        public void Att()
+        {
+            Action<StringArgs> action = args => {};
+            Action<StringArgs> actionB = Action;
+            Action<StringArgs> actionQ = Action2;
+
+            Action<EventArgs> parent = new Action<EventArgs>(o => action((StringArgs)o));
+
+            Action<EventArgs> action2 = new (o => action((StringArgs)o));
+            Action<EventArgs> actionNew = new (o =>actionQ((StringArgs)o));
+
+            bool Equals = parent.Equals(action2);
+            bool Equals2 = parent == action2;
+            
+            Assert.True(true);
+            Assert.AreEqual(action.Method.Name, actionB);
+            Assert.AreEqual(parent.Method.Name, action2.Method.Name);
+            Assert.AreNotEqual(parent, actionNew);
+        }
+        
+        [Test]
         public void Add_FillAndAdd_InOrder()
         {
-            FillEventDataStructAToZ(_struc);
-            _struc.Add("ba", null);
-            _struc.Add("da", null);
-            _struc.Add("bc", null);
-            _struc.Add("jk", null);
-            _struc.Add("zb", null);
+            FillEventDataStructAToZ(_struc, ActionDefault);
+            _struc.Add("ba", ActionDefault);
+            _struc.Add("da", ActionDefault);
+            _struc.Add("bc", ActionDefault);
+            _struc.Add("jk", ActionDefault);
+            _struc.Add("zb", ActionDefault);
 
 
-            List<Event> list = _struc.GetList();
+            List<EventDataObject<EventArgs>> list = _struc.GetList();
             Assert.AreEqual("ba", list[2].Key);
             Assert.AreEqual("bc", list[3].Key);
             Assert.AreEqual("da", list[6].Key);
@@ -53,13 +77,13 @@ namespace Test.Controller
         public void Add_FillAndAdd_NoDouble()
         {
             _struc.DoubleAction = false;
-            FillEventDataStructAToZ(_struc);
+            FillEventDataStructAToZ(_struc, ActionDefault);
             int startSize = _struc.Count;
-            _struc.Add("a", null);
-            _struc.Add("b", null);
-            _struc.Add("c", null);
-            _struc.Add("j", null);
-            _struc.Add("z", null);
+            _struc.Add("a", ActionDefault);
+            _struc.Add("b", ActionDefault);
+            _struc.Add("c", ActionDefault);
+            _struc.Add("j", ActionDefault);
+            _struc.Add("z", ActionDefault);
             _struc.Add("z", Action);
             _struc.Add("b", Action);
             
@@ -69,14 +93,14 @@ namespace Test.Controller
         [Test]
         public void Add_FillIdentic_InOrder()
         {
-            FillEventDataStructAToZ(_struc);
-            _struc.Add("a", null);
-            _struc.Add("d", null);
-            _struc.Add("b", null);
-            _struc.Add("z", null);
+            FillEventDataStructAToZ(_struc, ActionDefault);
+            _struc.Add("a", ActionDefault);
+            _struc.Add("d", ActionDefault);
+            _struc.Add("b", ActionDefault);
+            _struc.Add("z", ActionDefault);
             
 
-            List<Event> list = _struc.GetList();
+            List<EventDataObject<EventArgs>> list = _struc.GetList();
             Assert.AreEqual("a", list[0].Key);
             Assert.AreEqual("a", list[1].Key);
             Assert.AreEqual("b", list[2].Key);
@@ -90,7 +114,7 @@ namespace Test.Controller
         [Test]
         public void IndexOfKey_FillAToZ_GoodIndex()
         {
-            FillEventDataStructAToZ(_struc);
+            FillEventDataStructAToZ(_struc, ActionDefault);
             
             for (int i = 0; i < 26; i++)
             {
@@ -101,8 +125,8 @@ namespace Test.Controller
         [Test]
         public void IndexOfKey_Fill2Times_GoodIndex()
         {
-            FillEventDataStructAToZ(_struc);
-            FillEventDataStructAToZ(_struc);
+            FillEventDataStructAToZ(_struc, ActionDefault);
+            FillEventDataStructAToZ(_struc, ActionDefault);
             
             for (int i = 0; i < 26; i++)
             {
@@ -114,11 +138,11 @@ namespace Test.Controller
         [Test]
         public void Get_Fill2Times_GoodIndex()
         {
-            FillEventDataStructAToZ(_struc);
-            FillEventDataStructAToZ(_struc);
+            FillEventDataStructAToZ(_struc, ActionDefault);
+            FillEventDataStructAToZ(_struc, ActionDefault);
 
             string key = "b";
-            List<Event> indexOfKey = _struc.Get(key);
+            List<EventDataObject<EventArgs>> indexOfKey = _struc.Get(key);
             Assert.AreEqual(2, indexOfKey.Count);
             for (int i = 0; i < indexOfKey.Count; i++)
             {
@@ -127,7 +151,7 @@ namespace Test.Controller
             
             
             string key2 = "z";
-            List<Event> indexOfKey2 = _struc.Get(key2);
+            List<EventDataObject<EventArgs>> indexOfKey2 = _struc.Get(key2);
             Assert.AreEqual(2, indexOfKey2.Count);
             for (int i = 0; i < indexOfKey.Count; i++)
             {
@@ -138,20 +162,20 @@ namespace Test.Controller
         [Test]
         public void RemoveEventName_Fill2Times_GoodIndex()
         {
-            FillEventDataStructAToZ(_struc);
-            FillEventDataStructAToZ(_struc);
+            FillEventDataStructAToZ(_struc, ActionDefault);
+            FillEventDataStructAToZ(_struc, ActionDefault);
             int countStart = _struc.Count;
                 
             string key = "b";
             _struc.RemoveEventName(key);
-            List<Event> indexOfKey = _struc.Get(key);
+            List<EventDataObject<EventArgs>> indexOfKey = _struc.Get(key);
             Assert.AreEqual(0, indexOfKey.Count);
             Assert.AreEqual(countStart-2, _struc.Count);
 
 
             string key2 = "z";
             _struc.RemoveEventName(key2);
-            List<Event> indexOfKey2 = _struc.Get(key2);
+            List<EventDataObject<EventArgs>> indexOfKey2 = _struc.Get(key2);
             Assert.AreEqual(0, indexOfKey2.Count);
             Assert.AreEqual(countStart-4, _struc.Count);
         }
@@ -159,9 +183,9 @@ namespace Test.Controller
         [Test]
         public void Remove_Fill2Times_GoodIndex()
         {
-            FillEventDataStructAToZ(_struc);
-            FillEventDataStructAToZ(_struc, Action3);
-            FillEventDataStructAToZ(_struc,Action);
+            FillEventDataStructAToZ(_struc, ActionDefault);
+            FillEventDataStructAToZ(_struc,  Action3);
+            FillEventDataStructAToZ(_struc, Action);
             FillEventDataStructAToZ(_struc, Action2);
             FillEventDataStructAToZ(_struc, Action3);
             
@@ -169,20 +193,20 @@ namespace Test.Controller
                 
             string key = "b";
             _struc.Remove(key, Action3);
-            List<Event> indexOfKey = _struc.Get(key);
+            List<EventDataObject<EventArgs>> indexOfKey = _struc.Get(key);
             Assert.AreEqual(3, indexOfKey.Count);
             Assert.AreEqual(countStart-2, _struc.Count);
 
 
             string key2 = "z";
             _struc.Remove(key2, Action2);
-            List<Event> indexOfKey2 = _struc.Get(key2);
+            List<EventDataObject<EventArgs>> indexOfKey2 = _struc.Get(key2);
             Assert.AreEqual(4, indexOfKey2.Count);
             Assert.AreEqual(countStart-3, _struc.Count);
         }
 
 
-        private void FillEventDataStructAToZ(EventDataStruct struc, Action<String[]> action = null)
+        private void FillEventDataStructAToZ(EventDataStruct struc, Action<StringArgs> action)
         {
             for (int i = 0; i < 26; i++)
             {
@@ -191,21 +215,22 @@ namespace Test.Controller
         }
         
         
-        private void Action(String[] args)
+        private void Action(StringArgs args)
         {
-           
+            String a = "a";
         }
-        private void Action2(String[] args)
+        private void Action2(StringArgs args)
         {
-           
+            String b = "b";
         }
-        private void Action3(String[] args)
+        private void Action3(StringArgs args)
         {
-           
+            String c = "c";
         }
-        private void Action4(String[] args)
+        private void ActionDefault(StringArgs args)
         {
-           
+            String d = "d";
         }
+        
     }
 }

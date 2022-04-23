@@ -1,5 +1,7 @@
 ﻿
+using System;
 using TicTacToe2.Controller.Event;
+using TicTacToe2.Controller.Event.EventList;
 
 namespace TicTacToe2.Controller.States
 {
@@ -9,8 +11,9 @@ namespace TicTacToe2.Controller.States
 
         protected State()
         {
-            UserEvents.Listen("close", strings =>
+            UserEvents.Listen<Close>(strings =>
             {
+                strings.Value = 2;
                 Program.Running = false;
             } );
         }
