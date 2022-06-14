@@ -13,7 +13,6 @@ namespace TicTacToe2.Controller.States
         {
             UserEvents.Listen<Close>(strings =>
             {
-                strings.Value = 2;
                 Program.Running = false;
             } );
         }

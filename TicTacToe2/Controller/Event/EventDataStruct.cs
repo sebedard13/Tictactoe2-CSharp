@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TicTacToe2.Controller.Event.EventList;
 using TicTacToe2.Utils.Debug;
 using EventArgs = TicTacToe2.Controller.Event.EventList.EventArgs;
 
@@ -9,18 +8,16 @@ namespace TicTacToe2.Controller.Event
     
     public class EventDataStruct
     {
-        private readonly List<EventDataObject<EventList.EventArgs>> _list = new(); 
+        private readonly List<EventDataObject> _list = new(); 
 
         public int Count
             => _list.Count;
 
         public bool DoubleAction { get; set; } = false;
+        
 
-        private void privateAdd<T>(string key, Action<T> value) where T : notnull, EventArgs, new()
+        public void Add(EventDataObject newObj)
         {
-            int hash = value.GetHashCode();
-            EventDataObject<EventArgs> newObj = new (key, o => value((T)o));
-
             if (DoubleAction)
             {
                 int index = IndexOfKeyIndex(newObj);
@@ -42,12 +39,7 @@ namespace TicTacToe2.Controller.Event
                     int indexLoop = index;
                     while (TryFindKey(indexLoop) == newObj.Key)
                     {
-                        Action<EventArgs> tryFindAction = TryFindAction(indexLoop);
-                        Action<EventArgs> newObjValues = newObj.Method;
-
-                        bool t = tryFindAction == newObjValues;
-                        bool c = tryFindAction.Equals( newObjValues);
-                        if (tryFindAction.Equals( newObjValues))
+                        if (TryMethodId(indexLoop) == newObj.MethodId)
                         {
                             Debug.Error("Same key and action in event data structure");
                             return;
@@ -62,54 +54,28 @@ namespace TicTacToe2.Controller.Event
                 }
             }
         }
-
-        public void Add<T>(Action<T> value) where T : notnull, EventArgs, new()
-        {
-            privateAdd(KeyOffType<T>(), (Action<EventArgs>) value);
-        }
-        
-        public void Add(string key, Action<StringArgs> value)
-        {
-            privateAdd(key, value);
-        }
         
         public void Clear()
         {
             _list.Clear();
         }
 
-        public bool Contains<T>() where T : notnull,  EventList.EventArgs, new()
-        {
-            return Contains(KeyOffType<T>());
-        }
-        
         public bool Contains(string key)
         {
             return IndexOfKey(key) >= 0;
         }
         
-        public List<EventDataObject<EventList.EventArgs>> Get(string key)
+        public List<EventDataObject> Get(string key)
         {
             Range range = GetRange(key);
 
             return _list.GetRange(range.Start.Value, range.End.Value - range.Start.Value);
         }
-        public List<EventDataObject<EventList.EventArgs>> Get<T>()where T : notnull,  EventList.EventArgs, new()
-        {
-            return Get(KeyOffType<T>());
-        }
 
-        public List<EventDataObject<EventList.EventArgs>> GetList()
+        public List<EventDataObject> GetAll()
         {
             return _list;
         }
-
-        private Range GetRange<T>() where T : notnull,  EventList.EventArgs, new()
-        {
-            string key = KeyOffType<T>();
-            return GetRange(key);
-        }
-        
         private Range GetRange(string key) 
         {
             int index = IndexOfKey(key);
@@ -129,17 +95,7 @@ namespace TicTacToe2.Controller.Event
 
             return new Range(indexStart, indexEnd);
         }
-        
-        private string KeyOffType<T>() where T : notnull,  EventList.EventArgs, new()
-        {
-            return new T().GetEventName();
-        }
 
-        public void RemoveEventName<T>() where T : notnull,  EventList.EventArgs, new()
-        {
-            RemoveEventName(KeyOffType<T>());
-        }
-        
         public void RemoveEventName(string key)
         {
             Range range = GetRange(key);
@@ -149,25 +105,15 @@ namespace TicTacToe2.Controller.Event
                 _list.RemoveAt(range.Start.Value);
             }
         }
-
-        public void Remove(string key, Action<StringArgs> action)
-        {
-            Remove(new EventDataObject<StringArgs>(key, action));
-        }
         
-        public void Remove<T>(Action<EventArgs> action)where T : notnull,  EventArgs, new()
+        public void Remove(EventDataObject obj)
         {
-            Remove(new EventDataObject<EventArgs>(KeyOffType<T>(), action));
-        }
-
-        private void Remove<T>(EventDataObject<T> obj) where T : notnull,  EventArgs, new()
-        {
-            Range range = GetRange<T>();
+            Range range = GetRange(obj.Key);
 
             int end = range.End.Value;
             for (int i = range.Start.Value; i < end; i++)
             {
-                if (_list[i].Method == obj.Method)
+                if (TryMethodId(i) == obj.MethodId)
                 {
                     _list.RemoveAt(i);
                     i--;
@@ -177,15 +123,15 @@ namespace TicTacToe2.Controller.Event
         }
 
         /*
-        * Return the first 
+        * Because a binary search can find an object from the start and the end of the list
+         * we check to actually give the first of the list by going back
         */
         public int IndexOfKey(string key)
         {
-            EventDataObject<EventArgs> obj = new (key, null);
-            int index = _list.BinarySearch(obj);
+            int index = _list.BinarySearch(EventDataObjectUtils.CreateEmpty(key));
 
             //Get the first in the array
-            while (TryFindKey(index - 1) == obj.Key)
+            while (TryFindKey(index - 1) == key)
             {
                 index--;
             }
@@ -193,6 +139,23 @@ namespace TicTacToe2.Controller.Event
             return index;
         }
 
+        private int IndexOfKeyIndex(EventDataObject obj)
+        {
+            int index = IndexOfKey(obj.Key);
+
+            //No identic key
+            if (index < 0)
+            {
+                index = ~index;
+            }
+
+            return index;
+        }
+        
+        
+        //********
+        //TryFind.... suppress ArgumentOutOfRangeException if out of index
+        
         private string TryFindKey(int index)
         {
             try
@@ -204,30 +167,17 @@ namespace TicTacToe2.Controller.Event
                 return null;
             }
         }
-
-        private Action<EventArgs> TryFindAction(int index) 
+        
+        private string TryMethodId(int index)
         {
             try
             {
-                return _list[index].Method;
+                return _list[index].MethodId;
             }
             catch (ArgumentOutOfRangeException e)
             {
                 return null;
             }
-        }
-
-        private int IndexOfKeyIndex(EventDataObject<EventArgs> obj)
-        {
-            int index = IndexOfKey(obj.Key);
-
-            //No identic key
-            if (index < 0)
-            {
-                index = ~index;
-            }
-
-            return index;
         }
     }
 }

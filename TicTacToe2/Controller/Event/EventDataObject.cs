@@ -1,14 +1,17 @@
 ﻿using System;
+using TicTacToe2.Controller.Event.EventList;
+using EventArgs = TicTacToe2.Controller.Event.EventList.EventArgs;
 
 namespace TicTacToe2.Controller.Event
 {
-    public class EventDataObject<T>: IComparable<EventDataObject<T>> where T : notnull,  EventList.EventArgs, new()
+    public class EventDataObject: IComparable<EventDataObject>
     {
-        public EventDataObject(string key, Action<T> method) 
+        public EventDataObject(string key, string description, string methodId, Action<EventArgs> method)
         {
             Key = key;
+            Description = description;
+            MethodId = methodId;
             Method = method;
-            
         }
 
         public string Key { get; }
@@ -17,26 +20,58 @@ namespace TicTacToe2.Controller.Event
         
         public string MethodId { get; }
 
-        public Action<T> Method { get;  }
+        public Action<EventArgs> Method { get; set; }
 
         // public void Invoke()
         // {
         //     Invoke(Array.Empty<string>());
         // }
-        public void Invoke(T args)
+        public void Invoke(EventArgs args)
         {
             Method.Invoke(args);
         }
     
-        public int CompareTo(EventDataObject<T>? other)
+        public int CompareTo(EventDataObject? other)
         {
             return other == null ? 1 : String.Compare(this.Key, other.Key, StringComparison.Ordinal);
         }
         
-        public static explicit operator EventDataObject<T>(EventDataObject<EventList.EventArgs> d)
+        // public static explicit operator EventDataObject(EventDataObject d)
+        // {
+        //     Action<T> g = d.Method;
+        //     return new EventDataObject<T>(d.Key, g);
+        // }
+    }
+    
+    public static class EventDataObjectUtils{
+
+        public static EventDataObject CreateEmpty(string key)
         {
-            Action<T> g = d.Method;
-            return new EventDataObject<T>(d.Key, g);
+            return new EventDataObject(key, null, null, null);
         }
+        
+        public static EventDataObject Create<T>(Action<T> method) where T : notnull,  EventArgs, new ()
+        {
+            T currentClass = new T();
+            
+            string key = currentClass.GetEventName();
+            string description = currentClass.GetEventDescription();
+            string methodId = method.Method.ToString();
+            
+            Action<EventArgs> objectMethod = new (args => { method((T)args); });
+           
+            return new EventDataObject(key, description, methodId, objectMethod);
+        }
+        
+        public static EventDataObject Create(string key, Action<StringArgs> method)
+        {
+            string description = StringArgs.EventDescription;
+            string methodId = method.Method.ToString();
+            
+            Action<EventArgs> objectMethod = args => { method.Invoke((StringArgs)args); };
+           
+            return new EventDataObject(key, description, methodId, objectMethod);
+        }
+        
     }
 }

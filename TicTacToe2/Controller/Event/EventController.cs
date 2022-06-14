@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using TicTacToe2.Controller.Event.EventList;
 using TicTacToe2.Utils.Debug;
 using TicTacToe2.View;
@@ -16,25 +15,23 @@ namespace TicTacToe2.Controller.Event
         {
             Listen("help", strings =>
             {
-                List<EventDataObject<EventList.EventArgs>> list = _eventList.GetList();
-                foreach (EventDataObject<EventList.EventArgs> eventItem in list)
+                List<EventDataObject> list = _eventList.GetAll();
+                foreach (EventDataObject eventItem in list)
                 {
-                    ConsoleInterface.WriteLine(eventItem.Key);
+                    ConsoleInterface.WriteLine(eventItem.Key + "-" + eventItem.Description);
                 }
             });
         }
 
-        public void Listen<T>(Action<T> action)where T : notnull,  EventList.EventArgs, new()
+        public void Listen<T>(Action<T> action)where T : notnull,  EventArgs, new()
         {
-            T a = new T();
-            a.GetEventName();
-            _eventList.Add<T>(action);
+            _eventList.Add(EventDataObjectUtils.Create(action));
         }
         
         public void Listen(string eventName, Action<StringArgs> action)
         {
             eventName = CheckValidEvent(eventName, "Listen to");
-            _eventList.Add(eventName, action as Action<EventArgs>);
+            _eventList.Add(EventDataObjectUtils.Create(eventName, action));
         }
 
         // public void Call(string eventName)
@@ -42,17 +39,17 @@ namespace TicTacToe2.Controller.Event
         //     Call(eventName, Array.Empty<string>());
         // }
 
-        public void Call<T>(T args) where T : notnull,  EventList.EventArgs, new()
+        public void Call<T>(T args) where T : notnull,  EventArgs, new()
         {
-            String eventName = new T().GetEventName();
+            String eventName = KeyOffType<T>();
             eventName = CheckValidEvent(eventName, "Call");
-            List<EventDataObject<EventList.EventArgs>> events = _eventList.Get<T>();
+            List<EventDataObject> events = _eventList.Get(eventName);
             if (events.Count <= 0)
             {
                 Debug.Warning("EventArgs " + eventName + " was not found");
             }
             
-            foreach (EventDataObject<EventList.EventArgs> @event in events) 
+            foreach (EventDataObject @event in events) 
             {
                @event.Invoke(args);
             }
@@ -61,27 +58,27 @@ namespace TicTacToe2.Controller.Event
         public void Call(string eventName, string[] args)
         {
             eventName = CheckValidEvent(eventName, "Call");
-            List<EventDataObject<EventList.EventArgs>> events = _eventList.Get(eventName);
+            List<EventDataObject> events = _eventList.Get(eventName);
             if (events.Count <= 0)
             {
                 Debug.Warning("EventArgs " + eventName + " was not found");
             }
 
             StringArgs eventArgs = new StringArgs(args);
-            foreach (EventDataObject<EventList.EventArgs> @event in events) 
+            foreach (EventDataObject @event in events) 
             {
                 @event.Invoke(eventArgs);
             }
         }
 
-        public void Remove(string eventName, Action<EventList.EventArgs> action)
+        public void Remove(string eventName, Action<StringArgs> action)
         {
-            _eventList.Remove(eventName, action);
+            _eventList.Remove(EventDataObjectUtils.Create(eventName, action));
         }
 
-        public void Remove<T>() where T : notnull,  EventList.EventArgs, new()
+        public void Remove<T>() where T : notnull,  EventArgs, new()
         {
-            _eventList.RemoveEventName<T>();
+            _eventList.RemoveEventName(KeyOffType<T>());
         }
 
         private string CheckValidEvent(string eventName, string functionName)
@@ -94,5 +91,11 @@ namespace TicTacToe2.Controller.Event
 
             return lowerEventName;
         }
+        
+        private string KeyOffType<T>() where T : notnull,  EventArgs, new()
+        {
+            return new T().GetEventName();
+        }
+
     }
 }

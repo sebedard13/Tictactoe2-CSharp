@@ -13,5 +13,17 @@ namespace TicTacToe2.Controller.Event.EventList
         {
             Args = args;
         }
+
+        public override string GetEventName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetEventDescription()
+        {
+            return EventDescription;
+        }
+
+        public static string EventDescription = "No valid Description";
     }
 }
