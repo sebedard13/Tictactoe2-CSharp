@@ -1,4 +1,6 @@
 ﻿using System;
+using Model.Players.PlayerStrategies;
+using TicTacToe2.Controller.Event.EventList;
 using TicTacToe2.Model;
 using TicTacToe2.Model.Players;
 using TicTacToe2.Utils.Debug;
@@ -18,12 +20,10 @@ namespace TicTacToe2.Controller.States
             
             ViewController.Call("chooseplayer");
             
-            UserEvents.Listen("set", stringArgs =>
+            UserEvents.Listen<SetPlayer>(args =>
             {
-                string[] strings = stringArgs.Args;
-                int playerNo = Int32.Parse(strings[0]) - 1;
                 Tile tile;
-                if (playerNo == 0)
+                if (args.playerNo == 0)
                 {
                     tile = Tile.O;
                 }
@@ -31,21 +31,10 @@ namespace TicTacToe2.Controller.States
                 {
                     tile = Tile.X;
                 }
-                switch (strings[1])
-                {
-                    case "User":
-                        Player[playerNo] = new UserPlayer(tile);
-                        break;
-                    case "Random":
-                        Player[playerNo] = new RandomPlayer(tile);
-                        break;
-                    default:
-                        Debug.Warning("Not Valid Player");
-                        break;
-                }
-                
-                
-                
+                Player tmpPlayer = new Player(tile);
+                tmpPlayer.strategy = StrategiesUtils.GetPlayerStrategy(args.playerStrategie);
+
+                Player[args.playerNo] = tmpPlayer;                
             });
 
             UserEvents.Listen("startgame", strings =>

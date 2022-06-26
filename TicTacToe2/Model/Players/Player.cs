@@ -1,15 +1,20 @@
-﻿namespace TicTacToe2.Model.Players
+﻿using Model.Players.PlayerStrategies;
+
+namespace TicTacToe2.Model.Players
 {
-    public abstract class Player
+    public class Player
     {
         private readonly Tile _playerTile;
+        public PlayerStrategy strategy {get;set;}
 
-        protected Player(Tile playerTile)
+        public Player(Tile playerTile)
         {
             _playerTile = playerTile;
         }
 
-        public abstract void UserChoosePosition(TicTacToeGame game);
+        public void UserChoosePosition(TicTacToeGame game){
+            strategy.UserChoosePosition(game);
+        }
 
         public Tile PlayerTile => _playerTile;
     }

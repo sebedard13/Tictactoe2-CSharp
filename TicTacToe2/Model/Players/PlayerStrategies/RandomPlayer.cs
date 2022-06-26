@@ -1,13 +1,10 @@
 ﻿using System;
+using Model.Players.PlayerStrategies;
 
 namespace TicTacToe2.Model.Players
 {
-    public class RandomPlayer : Player
+    public class RandomPlayer : PlayerStrategy
     {
-        public RandomPlayer(Tile playerTile) : base(playerTile)
-        {
-        }
-
         public override void UserChoosePosition(TicTacToeGame game)
         {
             Random rnd = new Random();

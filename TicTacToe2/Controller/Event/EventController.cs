@@ -18,7 +18,7 @@ namespace TicTacToe2.Controller.Event
                 List<EventDataObject> list = _eventList.GetAll();
                 foreach (EventDataObject eventItem in list)
                 {
-                    ConsoleInterface.WriteLine(eventItem.Key + "-" + eventItem.Description);
+                    ConsoleInterface.WriteLine(eventItem.Key + " - " + eventItem.Description);
                 }
             });
         }
@@ -33,11 +33,6 @@ namespace TicTacToe2.Controller.Event
             eventName = CheckValidEvent(eventName, "Listen to");
             _eventList.Add(EventDataObjectUtils.Create(eventName, action));
         }
-
-        // public void Call(string eventName)
-        // {
-        //     Call(eventName, Array.Empty<string>());
-        // }
 
         public void Call<T>(T args) where T : notnull,  EventArgs, new()
         {
@@ -64,7 +59,8 @@ namespace TicTacToe2.Controller.Event
                 Debug.Warning("EventArgs " + eventName + " was not found");
             }
 
-            StringArgs eventArgs = new StringArgs(args);
+            StringArgs eventArgs = new StringArgs();
+            eventArgs.setArguments(args);
             foreach (EventDataObject @event in events) 
             {
                 @event.Invoke(eventArgs);

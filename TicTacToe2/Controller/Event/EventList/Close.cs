@@ -15,5 +15,10 @@ namespace TicTacToe2.Controller.Event.EventList
         {
             return EventDescription;
         }
+
+        public override void setArguments(string[] args)
+        {
+            //No args to do
+        }
     }
 }

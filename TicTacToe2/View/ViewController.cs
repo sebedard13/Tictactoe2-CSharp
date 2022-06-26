@@ -58,5 +58,9 @@ namespace TicTacToe2.View
         {
             ViewEvent.Call(key, args);
         }
+
+        public static void BadEvent(ArgumentException e){
+            ConsoleInterface.WriteLine("Mauvais argument:" + e.Message);
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using TicTacToe2.Controller.Event.EventList;
+using TicTacToe2.Utils.Debug;
+using TicTacToe2.View;
 using EventArgs = TicTacToe2.Controller.Event.EventList.EventArgs;
 
 namespace TicTacToe2.Controller.Event
@@ -50,7 +52,7 @@ namespace TicTacToe2.Controller.Event
             return new EventDataObject(key, null, null, null);
         }
         
-        public static EventDataObject Create<T>(Action<T> method) where T : notnull,  EventArgs, new ()
+        public static EventDataObject Create<T>(Action<T> method) where T : notnull, EventArgs, new ()
         {
             T currentClass = new T();
             
@@ -58,7 +60,18 @@ namespace TicTacToe2.Controller.Event
             string description = currentClass.GetEventDescription();
             string methodId = method.Method.ToString();
             
-            Action<EventArgs> objectMethod = new (args => { method((T)args); });
+            Action<EventArgs> objectMethod = arg => { 
+                T currentEvent = new T();
+                StringArgs currentArgs = (StringArgs) arg;
+                try{
+                    currentEvent.setArguments(currentArgs.Args);
+                    method.Invoke(currentEvent); 
+                }
+                catch(ArgumentException e){
+                 ViewController.BadEvent(e);   
+                }
+                
+                };
            
             return new EventDataObject(key, description, methodId, objectMethod);
         }
