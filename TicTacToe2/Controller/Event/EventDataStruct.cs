@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using TicTacToe2.Utils.Debug;
-using EventArgs = TicTacToe2.Controller.Event.EventList.EventArgs;
 
 namespace TicTacToe2.Controller.Event
 {
-    
     public class EventDataStruct
     {
-        private readonly List<EventDataObject> _list = new(); 
+        private readonly List<EventDataObject> _list = new();
 
         public int Count
             => _list.Count;
 
         public bool DoubleAction { get; set; } = false;
-        
+
 
         public void Add(EventDataObject newObj)
         {
@@ -54,7 +52,7 @@ namespace TicTacToe2.Controller.Event
                 }
             }
         }
-        
+
         public void Clear()
         {
             _list.Clear();
@@ -64,7 +62,7 @@ namespace TicTacToe2.Controller.Event
         {
             return IndexOfKey(key) >= 0;
         }
-        
+
         public List<EventDataObject> Get(string key)
         {
             Range range = GetRange(key);
@@ -76,13 +74,11 @@ namespace TicTacToe2.Controller.Event
         {
             return _list;
         }
-        private Range GetRange(string key) 
+
+        private Range GetRange(string key)
         {
             int index = IndexOfKey(key);
-            if (index < 0)
-            {
-                return new Range(0, 0);
-            }
+            if (index < 0) return new Range(0, 0);
 
             int indexStart = index;
 
@@ -100,26 +96,21 @@ namespace TicTacToe2.Controller.Event
         {
             Range range = GetRange(key);
 
-            for (int i = range.Start.Value; i < range.End.Value; i++)
-            {
-                _list.RemoveAt(range.Start.Value);
-            }
+            for (int i = range.Start.Value; i < range.End.Value; i++) _list.RemoveAt(range.Start.Value);
         }
-        
+
         public void Remove(EventDataObject obj)
         {
             Range range = GetRange(obj.Key);
 
             int end = range.End.Value;
             for (int i = range.Start.Value; i < end; i++)
-            {
                 if (TryMethodId(i) == obj.MethodId)
                 {
                     _list.RemoveAt(i);
                     i--;
                     end--;
                 }
-            }
         }
 
         /*
@@ -131,10 +122,7 @@ namespace TicTacToe2.Controller.Event
             int index = _list.BinarySearch(EventDataObjectUtils.CreateEmpty(key));
 
             //Get the first in the array
-            while (TryFindKey(index - 1) == key)
-            {
-                index--;
-            }
+            while (TryFindKey(index - 1) == key) index--;
 
             return index;
         }
@@ -144,18 +132,15 @@ namespace TicTacToe2.Controller.Event
             int index = IndexOfKey(obj.Key);
 
             //No identic key
-            if (index < 0)
-            {
-                index = ~index;
-            }
+            if (index < 0) index = ~index;
 
             return index;
         }
-        
-        
+
+
         //********
         //TryFind.... suppress ArgumentOutOfRangeException if out of index
-        
+
         private string TryFindKey(int index)
         {
             try
@@ -167,7 +152,7 @@ namespace TicTacToe2.Controller.Event
                 return null;
             }
         }
-        
+
         private string TryMethodId(int index)
         {
             try

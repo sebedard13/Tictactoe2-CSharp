@@ -4,36 +4,20 @@
     {
         public static bool TileHasWin(Tile playerTile, Map map)
         {
-
             for (int x = 0; x < map.Size; x++)
-            {
-                for (int y = 0; y <  map.Size; y++)
-                {
-                    if ( map.GetCase(x, y) != playerTile)
-                    {
-                        break;
-                    }
-
-                    if (y == map.Size - 1)
-                    {
-                        return true;
-                    }
-                }
-            }
             for (int y = 0; y < map.Size; y++)
             {
-                for (int x = 0; x < map.Size; x++)
-                {
-                    if (map.GetCase(x, y) != playerTile)
-                    {
-                        break;
-                    }
+                if (map.GetCase(x, y) != playerTile) break;
 
-                    if (x == map.Size - 1)
-                    {
-                        return true;
-                    }
-                }
+                if (y == map.Size - 1) return true;
+            }
+
+            for (int y = 0; y < map.Size; y++)
+            for (int x = 0; x < map.Size; x++)
+            {
+                if (map.GetCase(x, y) != playerTile) break;
+
+                if (x == map.Size - 1) return true;
             }
 
             {
@@ -41,15 +25,9 @@
                 int yCross = 0;
                 do
                 {
-                    if (map.GetCase(xCross, yCross) != playerTile)
-                    {
-                        break;
-                    }
+                    if (map.GetCase(xCross, yCross) != playerTile) break;
 
-                    if (xCross == map.Size - 1 && yCross == map.Size - 1)
-                    {
-                        return true;
-                    }
+                    if (xCross == map.Size - 1 && yCross == map.Size - 1) return true;
 
                     xCross++;
                     yCross++;
@@ -57,18 +35,12 @@
             }
             {
                 int xCross = 0;
-                int yCross = map.Size-1;
+                int yCross = map.Size - 1;
                 do
                 {
-                    if (map.GetCase(xCross, yCross) != playerTile)
-                    {
-                        break;
-                    }
+                    if (map.GetCase(xCross, yCross) != playerTile) break;
 
-                    if (xCross == map.Size - 1 && yCross == 0)
-                    {
-                        return true;
-                    }
+                    if (xCross == map.Size - 1 && yCross == 0) return true;
 
                     xCross++;
                     yCross--;

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using TicTacToe2.Controller.Event;
+
 namespace TicTacToe2.View
 {
     public static class GetFromView
@@ -8,7 +8,7 @@ namespace TicTacToe2.View
         public static ConsoleEvent GetUserEvent(EventController eventController)
         {
             string a = ConsoleInterface.GetLine();
-            if (!String.IsNullOrEmpty(a))
+            if (!string.IsNullOrEmpty(a))
             {
                 string[] list = a.Split(" ");
                 string eventName = list[0];

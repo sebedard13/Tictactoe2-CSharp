@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace TicTacToe2.Controller.Event.EventList
+﻿namespace TicTacToe2.Controller.Event.EventList
 {
     public class Close : EventArgs
     {
-        private new static string EventName = "close";
-        private new static string EventDescription = "Close the application";
+        private static readonly string EventName = "close";
+        private static readonly string EventDescription = "Close the application";
+
         public override string GetEventName()
         {
             return EventName;

@@ -2,15 +2,13 @@
 
 namespace TicTacToe2.View
 {
-    public static class ConsoleInterface 
+    public static class ConsoleInterface
     {
-
-        
         public static string GetLine()
         {
             return Console.In.ReadLine();
         }
-        
+
         public static void WriteLine(string s)
         {
             Console.ResetColor();
@@ -23,13 +21,13 @@ namespace TicTacToe2.View
             Console.Write("-ERROR- ");
             Console.ResetColor();
             Console.WriteLine(s);
-            
+
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("-ERROR- ");
             Console.ResetColor();
             Console.WriteLine("Future command may be compromised");
         }
-        
+
         public static void WriteWarning(string s)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -44,6 +42,5 @@ namespace TicTacToe2.View
             Console.ResetColor();
             Console.WriteLine(s);
         }
-        
     }
 }

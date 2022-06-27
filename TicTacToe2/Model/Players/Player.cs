@@ -4,18 +4,18 @@ namespace TicTacToe2.Model.Players
 {
     public class Player
     {
-        private readonly Tile _playerTile;
-        public PlayerStrategy strategy {get;set;}
-
         public Player(Tile playerTile)
         {
-            _playerTile = playerTile;
+            PlayerTile = playerTile;
         }
 
-        public void UserChoosePosition(TicTacToeGame game){
+        public PlayerStrategy strategy { get; set; }
+
+        public Tile PlayerTile { get; }
+
+        public void UserChoosePosition(TicTacToeGame game)
+        {
             strategy.UserChoosePosition(game);
         }
-
-        public Tile PlayerTile => _playerTile;
     }
 }

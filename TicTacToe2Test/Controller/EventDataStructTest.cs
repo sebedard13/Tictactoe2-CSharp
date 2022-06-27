@@ -196,7 +196,8 @@ namespace Test.Controller
             List<EventDataObject> list = _struc.Get("b");
             foreach (EventDataObject eventDataObject in list)
             {
-                StringArgs arg = new(new []{"value"});
+                StringArgs arg = new();
+                arg.setArguments((new []{"value"}));
                 eventDataObject.Invoke(arg);
             }
 

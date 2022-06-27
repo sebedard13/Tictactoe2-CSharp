@@ -1,5 +1,4 @@
 ﻿using Model.Players.PlayerStrategies;
-using TicTacToe2.View;
 
 namespace TicTacToe2.Model.Players
 {

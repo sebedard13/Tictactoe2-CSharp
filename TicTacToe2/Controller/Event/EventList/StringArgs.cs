@@ -4,7 +4,8 @@ namespace TicTacToe2.Controller.Event.EventList
 {
     public class StringArgs : EventArgs
     {
-        public String[] Args { get; set;}
+        public static string EventDescription = "No valid Description";
+        public string[] Args { get; set; }
 
         public override string GetEventName()
         {
@@ -20,7 +21,5 @@ namespace TicTacToe2.Controller.Event.EventList
         {
             Args = args;
         }
-
-        public static string EventDescription = "No valid Description";
     }
 }

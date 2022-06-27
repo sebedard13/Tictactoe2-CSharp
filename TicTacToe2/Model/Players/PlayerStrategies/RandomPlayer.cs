@@ -7,7 +7,7 @@ namespace TicTacToe2.Model.Players
     {
         public override void UserChoosePosition(TicTacToeGame game)
         {
-            Random rnd = new Random();
+            Random rnd = new();
 
             game.PlayerTurn(rnd.Next(1, 10));
             game.NextPlayerTurn();
