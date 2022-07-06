@@ -36,6 +36,13 @@ namespace TicTacToe2.Controller.States
                 else
                     Debug.Warning("Players are not initialized to start Game");
             });
+            
+            UserEvents.Listen("test", strings =>
+            {
+                UserEvents.Call("setplayer", new string[]{"1","user"});
+                UserEvents.Call("setplayer", new string[]{"2","minmax"});
+                UserEvents.Call("startgame", new string[]{});
+            });
         }
 
         private Player[] Player { get; } = {null, null};

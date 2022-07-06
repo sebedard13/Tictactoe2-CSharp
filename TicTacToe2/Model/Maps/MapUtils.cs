@@ -1,4 +1,6 @@
-﻿namespace TicTacToe2.Model.Maps
+﻿using System.Collections.Generic;
+
+namespace TicTacToe2.Model.Maps
 {
     public static class MapUtils
     {
@@ -47,6 +49,11 @@
                 } while (xCross < map.Size && yCross >= 0);
             }
             return false;
+        }
+        
+        public static bool TileHasAnyWin(Map map)
+        {
+            return TileHasWin(Tile.O, map) || TileHasWin(Tile.X, map);
         }
     }
 }

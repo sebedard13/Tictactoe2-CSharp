@@ -9,24 +9,24 @@ namespace TicTacToe2.Model
 {
     public class TicTacToeGame
     {
-        private readonly Map _map = new();
+        public readonly Map Map = new();
 
         private readonly List<Player> _players;
-        private readonly LoopList<Player> _playerTurn = new();
+        public readonly LoopList<Player> playersTurn = new();
 
         private bool _gameIsActive = true;
 
         public TicTacToeGame(Player player1, Player player2)
         {
-            _playerTurn.Enqueue(player1);
-            _playerTurn.Enqueue(player2);
+            playersTurn.Enqueue(player1);
+            playersTurn.Enqueue(player2);
             _players = new List<Player> {player1, player2};
         }
 
         public void StartGame()
         {
             ViewController.Call("startgame");
-            ViewController.Call("updatemap", new[] {_map.GetStringRepresentation()});
+            ViewController.Call("updatemap", new[] {Map.GetStringRepresentation()});
             NextPlayerTurn();
         }
 
@@ -34,7 +34,7 @@ namespace TicTacToe2.Model
         {
             Player playerWin = PlayerHasWin();
             if (playerWin == null && CalculateTie() || playerWin != null) _gameIsActive = false;
-            ViewController.Call("updatemap", new[] {_map.GetStringRepresentation()});
+            ViewController.Call("updatemap", new[] {Map.GetStringRepresentation()});
 
             if (!_gameIsActive)
             {
@@ -52,11 +52,11 @@ namespace TicTacToe2.Model
 
         public bool PlayerTurn(int pos)
         {
-            //Valid pos
-            if (_map.GetCase(pos) == Tile.Empty)
+            //Valid Position
+            if (Map.GetCase(pos) == Tile.Empty && pos>0 && pos < Map.Size*Map.Size+1)
             {
-                Player player = _playerTurn.LoopQueue();
-                _map.SetCase(player.PlayerTile, pos);
+                Player player = playersTurn.LoopQueue();
+                Map.SetCase(player.PlayerTile, pos);
                 EndGame();
                 return true;
             }
@@ -66,13 +66,13 @@ namespace TicTacToe2.Model
 
         public void NextPlayerTurn()
         {
-            if (_gameIsActive) _playerTurn.Peek().UserChoosePosition(this);
+            if (_gameIsActive) playersTurn.Peek().UserChoosePosition(this);
         }
 
         private Player PlayerHasWin()
         {
             foreach (Player player in _players)
-                if (MapUtils.TileHasWin(player.PlayerTile, _map))
+                if (MapUtils.TileHasWin(player.PlayerTile, Map))
                     return player;
 
             return null;
@@ -80,7 +80,7 @@ namespace TicTacToe2.Model
 
         private bool CalculateTie()
         {
-            return !_map.HasEmptyCase();
+            return !Map.HasEmptyCase();
         }
     }
 }

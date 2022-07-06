@@ -1,4 +1,5 @@
-﻿using TicTacToe2.Model;
+﻿using TicTacToe2.Controller.Event.EventList;
+using TicTacToe2.Model;
 using TicTacToe2.Model.Players;
 using TicTacToe2.Utils.Debug;
 
@@ -11,10 +12,9 @@ namespace TicTacToe2.Controller.States
             TicTacToeGame game = new(players[0], players[1]);
             game.StartGame();
 
-            UserEvents.Listen("play", stringArgs =>
+            UserEvents.Listen<Play>( args =>
             {
-                string[] strings = stringArgs.Args;
-                bool valid = game.PlayerTurn(short.Parse(strings[0]));
+                bool valid = game.PlayerTurn(args.Position);
                 if (!valid)
                     Debug.Warning("Not valid Case");
                 else

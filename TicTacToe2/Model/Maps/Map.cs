@@ -3,7 +3,7 @@ using TicTacToe2.Model.Exception;
 
 namespace TicTacToe2.Model.Maps
 {
-    public class Map
+    public class Map : ICloneable
     {
         private readonly Tile[,] _mapArray;
 
@@ -16,7 +16,7 @@ namespace TicTacToe2.Model.Maps
 
         public int Size { get; }
 
-        public void SetAllCases(Tile tile)
+        private void SetAllCases(Tile tile)
         {
             for (int i = 0; i < _mapArray.GetLength(0); i++)
             for (int j = 0; j < _mapArray.GetLength(1); j++)
@@ -26,14 +26,7 @@ namespace TicTacToe2.Model.Maps
 
         public void SetCase(Tile tile, int posX, int posY)
         {
-            try
-            {
-                _mapArray[posY, posX] = tile;
-            }
-            catch (IndexOutOfRangeException e)
-            {
-                throw new CaseNotValidException();
-            }
+            _mapArray[posY, posX] = tile;
         }
 
         //Input Shoud go
@@ -108,6 +101,18 @@ namespace TicTacToe2.Model.Maps
                     return true;
 
             return false;
+        }
+
+        public object Clone()
+        {
+            Map newMap = new Map(Size);
+
+            for (int i = 1; i < Size*Size+1; i++)
+            {
+                newMap.SetCase(this.GetCase(i), i);
+            }
+
+            return newMap;
         }
     }
 

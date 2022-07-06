@@ -13,6 +13,7 @@ namespace Model.Players.PlayerStrategies
 
             dic.Add("user", new UserPlayer());
             dic.Add("random", new RandomPlayer());
+            dic.Add("minmax", new MinMaxPlayer());
 
             return dic;
         }
