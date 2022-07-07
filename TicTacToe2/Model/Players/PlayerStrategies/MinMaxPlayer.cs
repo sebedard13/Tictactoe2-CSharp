@@ -17,13 +17,16 @@ namespace TicTacToe2.Model.Players
             game.NextPlayerTurn();
         }
 
-        private MinMaxMove MinMax(MapContainer mapContainer, Player currentPlayer, int maxDepth, int currentDepth)
+        public MinMaxMove MinMax(MapContainer mapContainer, Player currentPlayer, int maxDepth, int currentDepth)
         {
+            if(mapContainer.CurrentPlayer() == currentPlayer){
+                String a = "d";
+            }
             //    # Check if we’re done recursing.
             if (MapUtils.TileHasAnyWin(mapContainer.Map) || currentDepth == maxDepth)
             {
                 MinMaxMove returnMoveEnd = new MinMaxMove();
-                returnMoveEnd.move = mapContainer.GetMoves().IndexOf(0);
+                returnMoveEnd.move = -1;
                 if (MapUtils.TileHasWin(currentPlayer.PlayerTile, mapContainer.Map))
                 {
                     returnMoveEnd.score = 20;
@@ -46,15 +49,15 @@ namespace TicTacToe2.Model.Players
 
 
             //  # Otherwise bubble up values from below.
-            int bestMove = mapContainer.GetMoves().IndexOf(0);
+            int bestMove = -1;
             int bestScore;
             if (mapContainer.CurrentPlayer() == currentPlayer)
             {
-                bestScore= -99;
+                bestScore= -9999;
             }
             else
             {
-                bestScore = 99;
+                bestScore = 9999;
             }
       
            
@@ -92,13 +95,13 @@ namespace TicTacToe2.Model.Players
         }
     }
 
-    struct MinMaxMove
+    public struct MinMaxMove
     {
         public int move;
         public int score;
     }
 
-    class MapContainer
+    public class MapContainer
     {
         public Map Map;
 
@@ -122,9 +125,23 @@ namespace TicTacToe2.Model.Players
             {
                 _players.Enqueue(d.Current);
             }
+            _players.LoopQueue();
+            Player p = _players.Peek();
+            String a = "";
             
         }
-        
+
+        //For test
+        public MapContainer(Map map, Player currentPlayer, Player nextPlayers)
+        {
+            Map = map;
+
+
+            _players.Enqueue(currentPlayer);      
+            _players.Enqueue(nextPlayers);      
+      
+        }
+
         public Player CurrentPlayer()
         {
             return  _players.Peek();
@@ -148,7 +165,6 @@ namespace TicTacToe2.Model.Players
         {
             Map newmap = (Map)Map.Clone();
             newmap.SetCase(_players.Peek().PlayerTile,move);
-            _players.LoopQueue();
             return newmap;
         }
     }

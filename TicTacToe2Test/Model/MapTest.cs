@@ -117,5 +117,26 @@ namespace Test.Model
             
             Assert.False(MapUtils.TileHasWin(Tile.O, _map));
         }
+
+        [Test]
+        public void Clone_MapNotEmpty_Equal()
+        {
+            _map.SetCase(Tile.O, 8);
+            _map.SetCase(Tile.X, 4);
+            _map.SetCase(Tile.X, 5);
+            _map.SetCase(Tile.O, 6);
+            _map.SetCase(Tile.O, 1);
+
+            Map newMap = (Map)_map.Clone();
+            Assert.Equals(newMap.GetCase(7), Tile.Empty);
+            Assert.Equals(newMap.GetCase(8), Tile.O);
+            Assert.Equals(newMap.GetCase(9), Tile.Empty);
+            Assert.Equals(newMap.GetCase(4), Tile.X);
+            Assert.Equals(newMap.GetCase(5), Tile.X);
+            Assert.Equals(newMap.GetCase(6), Tile.O);
+            Assert.Equals(newMap.GetCase(1), Tile.O);
+            Assert.Equals(newMap.GetCase(2), Tile.Empty);
+            Assert.Equals(newMap.GetCase(3), Tile.Empty);
+        }
     }
 }
