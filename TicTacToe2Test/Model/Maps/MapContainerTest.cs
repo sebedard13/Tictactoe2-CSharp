@@ -15,8 +15,8 @@ namespace Test.Model.Maps
         Map map;
         Player currentPlayer = new Player(Tile.O);
         Player nextPlayer = new Player(Tile.X);
-       
-       [SetUp]
+
+        [SetUp]
         public void beforeAll()
         {
             map = new Map();
@@ -30,23 +30,23 @@ namespace Test.Model.Maps
             List<int> moves = mapContainer.GetMoves();
 
             Assert.AreEqual(moves.Count, 9);
-            Assert.Contains( 9, moves);
-            Assert.Contains( 8, moves);
-            Assert.Contains( 7, moves);
-            Assert.Contains( 6, moves);
-            Assert.Contains( 5, moves);
-            Assert.Contains( 4, moves);
-            Assert.Contains( 3, moves);
-            Assert.Contains( 2, moves);
-            Assert.Contains( 1, moves);
+            Assert.Contains(9, moves);
+            Assert.Contains(8, moves);
+            Assert.Contains(7, moves);
+            Assert.Contains(6, moves);
+            Assert.Contains(5, moves);
+            Assert.Contains(4, moves);
+            Assert.Contains(3, moves);
+            Assert.Contains(2, moves);
+            Assert.Contains(1, moves);
         }
 
         [Test]
         public void GetMoves_MapWithMove_All9()
         {
-            map.SetCase( Tile.X,7);
-            map.SetCase( Tile.X,9);
-            map.SetCase( Tile.X,2);
+            map.SetCase(Tile.X, 7);
+            map.SetCase(Tile.X, 9);
+            map.SetCase(Tile.X, 2);
 
             MapContainer mapContainer = new(map, currentPlayer, nextPlayer);
 
@@ -105,13 +105,13 @@ namespace Test.Model.Maps
         [Test]
         public void CurrentPlayer_MapContainer1_GoodPlayer()
         {
-           
+
             MapContainer mapContainer = new(map, currentPlayer, nextPlayer);
 
             Player newPlayer = mapContainer.CurrentPlayer();
 
             Assert.AreSame(newPlayer, currentPlayer);
-         
+
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace Test.Model.Maps
             MapContainer mapContainer = new(map, currentPlayer, nextPlayer);
 
             int valueCurrent = mapContainer.Evaluate(currentPlayer);
-            Assert.AreEqual(valueCurrent,0);
+            Assert.AreEqual(valueCurrent, 0);
 
             int valueNext = mapContainer.Evaluate(nextPlayer);
             Assert.AreEqual(valueNext, 0);

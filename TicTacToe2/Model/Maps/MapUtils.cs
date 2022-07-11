@@ -7,20 +7,20 @@ namespace TicTacToe2.Model.Maps
         public static bool TileHasWin(Tile playerTile, Map map)
         {
             for (int x = 0; x < map.Size; x++)
+                for (int y = 0; y < map.Size; y++)
+                {
+                    if (map.GetCase(x, y) != playerTile) break;
+
+                    if (y == map.Size - 1) return true;
+                }
+
             for (int y = 0; y < map.Size; y++)
-            {
-                if (map.GetCase(x, y) != playerTile) break;
+                for (int x = 0; x < map.Size; x++)
+                {
+                    if (map.GetCase(x, y) != playerTile) break;
 
-                if (y == map.Size - 1) return true;
-            }
-
-            for (int y = 0; y < map.Size; y++)
-            for (int x = 0; x < map.Size; x++)
-            {
-                if (map.GetCase(x, y) != playerTile) break;
-
-                if (x == map.Size - 1) return true;
-            }
+                    if (x == map.Size - 1) return true;
+                }
 
             {
                 int xCross = 0;
@@ -50,7 +50,7 @@ namespace TicTacToe2.Model.Maps
             }
             return false;
         }
-        
+
         public static bool TileHasAnyWin(Map map)
         {
             return TileHasWin(Tile.O, map) || TileHasWin(Tile.X, map) || !map.HasEmptyCase();

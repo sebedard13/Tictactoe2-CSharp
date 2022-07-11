@@ -20,14 +20,14 @@ namespace TicTacToe2.Model.Players
 
         public MinMaxMove MinMax(MapContainer mapContainer, Player currentPlayer, int maxDepth, int currentDepth)
         {
-            
+
             //    # Check if we’re done recursing.
             if (MapUtils.TileHasAnyWin(mapContainer.Map) || currentDepth == maxDepth)
             {
                 MinMaxMove returnMoveEnd = new MinMaxMove();
                 returnMoveEnd.move = -1;
-                returnMoveEnd.score = mapContainer.Evaluate(currentPlayer)/(currentDepth+1);
-               
+                returnMoveEnd.score = mapContainer.Evaluate(currentPlayer) / (currentDepth + 1);
+
 
                 return returnMoveEnd;
             }
@@ -38,40 +38,40 @@ namespace TicTacToe2.Model.Players
             int bestScore;
             if (mapContainer.CurrentPlayer() == currentPlayer)
             {
-                bestScore= -9999;
+                bestScore = -9999;
             }
             else
             {
                 bestScore = 9999;
             }
-      
-           
-           
+
+
+
             // Go through each move.
             foreach (int move in mapContainer.GetMoves())
             {
-              Map newMap= mapContainer.doMoveOn(move);
-                
+                Map newMap = mapContainer.doMoveOn(move);
 
-                MinMaxMove bestMoveOf = MinMax(new MapContainer(mapContainer,newMap), currentPlayer, maxDepth ,currentDepth + 1);
-              
+
+                MinMaxMove bestMoveOf = MinMax(new MapContainer(mapContainer, newMap), currentPlayer, maxDepth, currentDepth + 1);
+
                 if (mapContainer.CurrentPlayer() == currentPlayer)
-              {
-                  if (bestMoveOf.score > bestScore)
-                  {
-                      bestScore = bestMoveOf.score;
-                      bestMove = move;
-                  }
-                  
-              }
-              else
-              {
-                  if (bestMoveOf.score < bestScore)
-                  {
-                      bestScore = bestMoveOf.score;
-                      bestMove = move;
-                  }
-              }
+                {
+                    if (bestMoveOf.score > bestScore)
+                    {
+                        bestScore = bestMoveOf.score;
+                        bestMove = move;
+                    }
+
+                }
+                else
+                {
+                    if (bestMoveOf.score < bestScore)
+                    {
+                        bestScore = bestMoveOf.score;
+                        bestMove = move;
+                    }
+                }
             }
 
             MinMaxMove returnMove = new MinMaxMove();

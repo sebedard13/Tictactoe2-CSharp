@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using TicTacToe2.Model;
 using TicTacToe2.Model.Maps;
 using TicTacToe2.Model.Players;
@@ -25,7 +20,7 @@ namespace Test.Model.Players.PlayerStrategies
             map.SetCase(Tile.O, 4);
             map.SetCase(Tile.O, 5);
             Player current = new Player(Tile.X);
-            Assert.AreEqual(p.MinMax(new MapContainer(map, current, new Player(Tile.O)),current, 9, 0).move, 6);
+            Assert.AreEqual(p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 9, 0).move, 6);
         }
 
         [Test]
@@ -39,7 +34,7 @@ namespace Test.Model.Players.PlayerStrategies
             map.SetCase(Tile.X, 1);
             map.SetCase(Tile.O, 3);
             Player current = new Player(Tile.X);
-            
+
             Assert.AreEqual(p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 3, 0).move, 9);
         }
 
@@ -53,8 +48,8 @@ namespace Test.Model.Players.PlayerStrategies
             Player current = new Player(Tile.X);
             int moveFound = p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 10, 0).move;
 
-            //Good move center
-            Assert.AreEqual(moveFound,5);
+            //Good move corner
+            Assert.AreEqual(moveFound, 1);
         }
 
         [Test]
