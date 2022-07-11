@@ -53,7 +53,7 @@ namespace TicTacToe2.Model.Maps
         
         public static bool TileHasAnyWin(Map map)
         {
-            return TileHasWin(Tile.O, map) || TileHasWin(Tile.X, map);
+            return TileHasWin(Tile.O, map) || TileHasWin(Tile.X, map) || !map.HasEmptyCase();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Test.Model.Players.PlayerStrategies
             map.SetCase(Tile.O, 4);
             map.SetCase(Tile.O, 5);
             Player current = new Player(Tile.X);
-            Assert.Equals(p.MinMax(new MapContainer(map, current, new Player(Tile.O)),current, 9, 0).move, 6);
+            Assert.AreEqual(p.MinMax(new MapContainer(map, current, new Player(Tile.O)),current, 9, 0).move, 6);
         }
 
         [Test]
@@ -34,15 +34,13 @@ namespace Test.Model.Players.PlayerStrategies
             MinMaxPlayer p = new MinMaxPlayer();
             Map map = new Map();
 
-
-
             map.SetCase(Tile.X, 5);
             map.SetCase(Tile.O, 7);
             map.SetCase(Tile.X, 1);
             map.SetCase(Tile.O, 3);
             Player current = new Player(Tile.X);
             
-            Assert.Equals(p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 9, 0).move, 9);
+            Assert.AreEqual(p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 3, 0).move, 9);
         }
 
         [Test]
@@ -53,10 +51,10 @@ namespace Test.Model.Players.PlayerStrategies
             map.SetCase(Tile.O, 4);
 
             Player current = new Player(Tile.X);
-            int moveFound = p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 9, 0).move;
+            int moveFound = p.MinMax(new MapContainer(map, current, new Player(Tile.O)), current, 10, 0).move;
 
             //Good move center
-            Assert.True(moveFound ==5);
+            Assert.AreEqual(moveFound,5);
         }
 
         [Test]
